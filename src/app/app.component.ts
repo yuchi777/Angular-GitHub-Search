@@ -1,67 +1,41 @@
 import { Component } from '@angular/core';
-import { GitHubService } from './github.service';
-import { FormControl } from '@angular/forms';
-import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
-  styles:[`
-    .img{
-      position:relative;
-      float:left;
-      width:100px;
-      height:100px;
-      background-position: 50% 50%;
-      background-repeat: no-repeat;
-      background-size:cover;
-    }
-  `],
   template: `
-  <input class="form-control" type="search" [formControl]="searchControl">
-  <h3>GitHub User Results</h3>
-  <div *ngIf="isLoading"><i class="fa fa-spinner fa-spin fa-3x"></i>Getting Data...</div>
-
-  <div *ngFor="let user of users"  class="media">
-    <a href="{{user['html_url']}}">
-      <img src="{{user['avatar_url']}}"  class="img align-self-start mr-3" alt="...">
-    </a>
-    <div class="media-body">
-      <h5 class="mt-0">{{user['login']}}</h5>
-      Score:{{user['score']}}
+  <nav class="navbar navbar-expand-lg navbar-light bg-info">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="github">GitHub Search</a>
+        </li>
+      </ul>
+      
     </div>
   </div>
+</nav>
+<!-- 
+  <ul>
+    <li><a routerLink="">Home</a></li>
+    <li><a routerLink="github">GitHub</a></li>
+  </ul> -->
+    <router-outlet></router-outlet>
   `,
-  providers:[GitHubService]
+  providers:[]
 })
 export class AppComponent {
-  title = 'myGitHubSearch';
+  
 
-  searchControl = new FormControl();
-  isLoading = false;
-  users = [] ;
-
-  constructor(private _gitHubService:GitHubService){
+  constructor(){
     
   }
 
-  //constructor執行完執行ngOninit Hook
-  ngOnInit(){
-
-    //formcontrol 值改變時
-    this.searchControl.valueChanges
-    .pipe(filter(text=>text.length>=3), debounceTime(400), distinctUntilChanged())
-    .subscribe((value)=>{
-      this.isLoading = true;
-      //api撈取資料
-      this._gitHubService.getGitHubData(value).subscribe((data)=>{
-        //加載中
-        this.isLoading = false;
-        this.users = data.items;
-        console.log(data.items);
-      })
-    })
-
-
-    
-
-  }
+  
 }

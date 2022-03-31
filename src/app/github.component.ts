@@ -22,7 +22,10 @@ import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
   <div *ngFor="let user of users"  class="media">
     <a href="{{user['html_url']}}">
-      <img src="{{user['avatar_url']}}"  class="img align-self-start mr-3" alt="...">
+      <img src="{{user['avatar_url']}}" class="img align-self-start mr-3" alt="...">
+    </a>
+    <a [routerLink]="['user',user['login'],user['score']]">
+      <h5>URL params</h5>
     </a>
     <div class="media-body">
       <h5 class="mt-0">{{user['login']}}</h5>
